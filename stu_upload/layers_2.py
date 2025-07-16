@@ -72,15 +72,31 @@ class MaxPoolingLayer(object):
         start_time = time.time()
         self.input = input # [N, C, H, W]
         self.max_index = np.zeros(self.input.shape)
-        height_out = (self.input.shape[2] - self.kernel_size) / self.stride + 1
-        width_out = (self.input.shape[3] - self.kernel_size) / self.stride + 1
+        height_out = (self.input.shape[2] - self.kernel_size) // self.stride + 1
+        width_out = (self.input.shape[3] - self.kernel_size) // self.stride + 1
         self.output = np.zeros([self.input.shape[0], self.input.shape[1], height_out, width_out])
         for idxn in range(self.input.shape[0]):
             for idxc in range(self.input.shape[1]):
                 for idxh in range(height_out):
                     for idxw in range(width_out):
 			            # TODO： 计算最大池化层的前向传播， 取池化窗口内的最大值
-                        self.output[idxn, idxc, idxh, idxw] = _______________________
+
+                        #提取input_patch:
+                        start_h = idxh * self.stride
+                        start_w = idxw * self.stride
+                        input_patch = self.input[idxn, idxc, start_h:start_h + self.kernel_size, start_w:start_w + self.kernel_size]
+
+                        max_val = np.max(input_patch)
+                        self.output[idxn, idxc, idxh, idxw] = max_val
+
+                        #    找到最大值在2D窗口内的局部坐标
+                        max_index_in_patch_flat = np.argmax(input_patch)
+                        max_pos_in_patch = np.unravel_index(max_index_in_patch_flat, input_patch.shape) # 返回一个(row, col)元组
+
+                        #    计算全局坐标并在 self.max_index 中标记为1
+                        global_h = start_h + max_pos_in_patch[0]
+                        global_w = start_w + max_pos_in_patch[1]
+                        self.max_index[idxn, idxc, global_h, global_w] = 1
         return self.output
 
 class FlattenLayer(object):
