@@ -65,6 +65,19 @@ class VGG19(object):
         self.layers['pool4'] = MaxPoolingLayer(2, 2)
 
 
+        # Block 5 (完整版)
+        self.layers['conv5_1'] = ConvolutionalLayer(3, 512, 512, 1, 1)
+        self.layers['relu5_1'] = ReLULayer()
+        self.layers['conv5_2'] = ConvolutionalLayer(3, 512, 512, 1, 1)
+        self.layers['relu5_2'] = ReLULayer()
+        self.layers['conv5_3'] = ConvolutionalLayer(3, 512, 512, 1, 1)
+        self.layers['relu5_3'] = ReLULayer()
+        self.layers['conv5_4'] = ConvolutionalLayer(3, 512, 512, 1, 1)
+        self.layers['relu5_4'] = ReLULayer()
+        self.layers['pool5'] = MaxPoolingLayer(2, 2)
+        
+        # 回到老师代码
+
         self.layers['conv5_4'] = ConvolutionalLayer(3, 512, 512, 1, 1)
         self.layers['relu5_4'] = ReLULayer()
         self.layers['pool5'] = MaxPoolingLayer(2, 2)
@@ -74,7 +87,7 @@ class VGG19(object):
         self.layers['relu6'] = ReLULayer()
 
         self.layers['fc7'] = FullyConnectedLayer(4096, 4096)
-        self.layers['relu6'] = ReLULayer()
+        self.layers['relu7'] = ReLULayer()
 
         self.layers['fc8'] = FullyConnectedLayer(4096, 1000)
 

@@ -31,8 +31,8 @@ class ConvolutionalLayer(object):
         width = self.input.shape[3] + self.padding * 2
         self.input_pad = np.zeros([self.input.shape[0], self.input.shape[1], height, width])
         self.input_pad[:, :, self.padding:self.padding+self.input.shape[2], self.padding:self.padding+self.input.shape[3]] = self.input
-        height_out = (height - self.kernel_size) / self.stride + 1
-        width_out = (width - self.kernel_size) / self.stride + 1
+        height_out = (height - self.kernel_size) // self.stride + 1
+        width_out = (width - self.kernel_size) // self.stride + 1
         self.output = np.zeros([self.input.shape[0], self.channel_out, height_out, width_out])
         for idxn in range(self.input.shape[0]):
             for idxc in range(self.channel_out):
@@ -49,8 +49,8 @@ class ConvolutionalLayer(object):
         width = self.input.shape[3] + self.padding * 2
         self.input_pad = np.zeros([self.input.shape[0], self.input.shape[1], height, width])
         self.input_pad[:, :, self.padding:self.padding+self.input.shape[2], self.padding:self.padding+self.input.shape[3]] = self.input
-        height_out = (height - self.kernel_size) / self.stride + 1
-        width_out = (width - self.kernel_size) / self.stride + 1
+        height_out = (height - self.kernel_size) // self.stride + 1
+        width_out = (width - self.kernel_size) // self.stride + 1
         self.output = np.zeros([self.input.shape[0], self.channel_out, height_out, width_out])
         self.weight_reshape = np.reshape(self.weight, [-1, self.channel_out])
         for idxn in range(self.input.shape[0]):
@@ -68,8 +68,8 @@ class ConvolutionalLayer(object):
         width = self.input.shape[3] + self.padding * 2
         self.input_pad = np.zeros([self.input.shape[0], self.input.shape[1], height, width])
         self.input_pad[:, :, self.padding:self.padding+self.input.shape[2], self.padding:self.padding+self.input.shape[3]] = self.input
-        self.height_out = (height - self.kernel_size) / self.stride + 1
-        self.width_out = (width - self.kernel_size) / self.stride + 1
+        self.height_out = (height - self.kernel_size) // self.stride + 1
+        self.width_out = (width - self.kernel_size) // self.stride + 1
         self.weight_reshape = np.reshape(self.weight, [-1, self.channel_out])
         self.img2col = np.zeros([self.input.shape[0]*self.height_out*self.width_out, self.channel_in*self.kernel_size*self.kernel_size])
         for idxn in range(self.input.shape[0]):
@@ -139,8 +139,8 @@ class MaxPoolingLayer(object):
         start_time = time.time()
         self.input = input # [N, C, H, W]
         self.max_index = np.zeros(self.input.shape)
-        height_out = (self.input.shape[2] - self.kernel_size) / self.stride + 1
-        width_out = (self.input.shape[3] - self.kernel_size) / self.stride + 1
+        height_out = (self.input.shape[2] - self.kernel_size) // self.stride + 1
+        width_out = (self.input.shape[3] - self.kernel_size) // self.stride + 1
         self.output = np.zeros([self.input.shape[0], self.input.shape[1], height_out, width_out])
         for idxn in range(self.input.shape[0]):
             for idxc in range(self.input.shape[1]):
@@ -156,8 +156,8 @@ class MaxPoolingLayer(object):
     def forward(self, input):
         start_time = time.time()
         self.input = input # [N, C, H, W]
-        self.height_out = (self.input.shape[2] - self.kernel_size) / self.stride + 1
-        self.width_out = (self.input.shape[3] - self.kernel_size) / self.stride + 1
+        self.height_out = (self.input.shape[2] - self.kernel_size) // self.stride + 1
+        self.width_out = (self.input.shape[3] - self.kernel_size) // self.stride + 1
         img2col = np.zeros([self.input.shape[0], self.input.shape[1], self.height_out*self.width_out, self.kernel_size*self.kernel_size])
         for idxh in range(self.height_out):
             for idxw in range(self.width_out):

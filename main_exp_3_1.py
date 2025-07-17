@@ -39,7 +39,7 @@ def test_conv_and_pool_layer():
     print('test conv err rate: %f%%'%(conv_mse*100))
 
     pool = MaxPoolingLayer(2, 2)
-    pool_result = pool.forward(test_data)
+    pool_result = pool.forward_raw(test_data)
 
     std_pool = standardPool(2, 2)
     std_pool_result = std_pool.forward(test_data)
