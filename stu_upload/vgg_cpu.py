@@ -136,6 +136,11 @@ class VGG19(object):
         resized_image = pil_image.resize((224, 224))
         self.input_image = np.array(resized_image)
 
+        # ********** 新增代码 **********
+        # 将图片从 RGB 转换为 BGR
+        self.input_image = self.input_image[:, :, ::-1]
+        # ***************************
+
         # 3. 转换为浮点数
         self.input_image = self.input_image.astype(np.float32)
 
