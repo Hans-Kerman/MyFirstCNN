@@ -5,6 +5,8 @@ import os
 import scipy.io
 import time
 
+import imageio.v2 as imageio 
+
 from .layers_1 import FullyConnectedLayer, ReLULayer, SoftmaxLossLayer
 from .layers_2 import ConvolutionalLayer, MaxPoolingLayer, FlattenLayer
 
@@ -125,7 +127,7 @@ class VGG19(object):
 
     def load_image(self, image_dir):
         print('Loading and preprocessing image from ' + image_dir)
-        self.input_image = scipy.misc.imread(image_dir)
+        self.input_image = imageio.imread(image_dir)
         self.input_image = scipy.misc.imresize(self.input_image,[224,224,3])
         self.input_image = np.array(self.input_image).astype(np.float32)
         self.input_image -= self.image_mean
