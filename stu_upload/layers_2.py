@@ -98,6 +98,8 @@ class MaxPoolingLayer(object):
                         global_w = start_w + max_pos_in_patch[1]
                         self.max_index[idxn, idxc, global_h, global_w] = 1
         return self.output
+    def forward(self, input):
+        return self.forward_raw(input)
 
 class FlattenLayer(object):
     def __init__(self, input_shape, output_shape):  # 扁平化层的初始化
