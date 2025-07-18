@@ -6,6 +6,7 @@ import scipy.io
 import time
 
 import imageio.v2 as imageio 
+from PIL import Image
 
 from .layers_1 import FullyConnectedLayer, ReLULayer, SoftmaxLossLayer
 from .layers_2 import ConvolutionalLayer, MaxPoolingLayer, FlattenLayer
@@ -127,12 +128,26 @@ class VGG19(object):
 
     def load_image(self, image_dir):
         print('Loading and preprocessing image from ' + image_dir)
+        # 1. 读取图片，此时形状是 (H, W, C)，例如 (height, width, 3)
         self.input_image = imageio.imread(image_dir)
-        self.input_image = scipy.misc.imresize(self.input_image,[224,224,3])
-        self.input_image = np.array(self.input_image).astype(np.float32)
+
+        # 2. 调整图片大小为 (224, 224, 3)
+        pil_image = Image.fromarray(self.input_image)
+        resized_image = pil_image.resize((224, 224))
+        self.input_image = np.array(resized_image)
+
+        # 3. 转换为浮点数
+        self.input_image = self.input_image.astype(np.float32)
+
+        # 4. 在 (H, W, C) 的维度下减去均值，此时 NumPy 可以正确广播
+        # (224, 224, 3) -= (3,)  <-- 这样运算是正确的
         self.input_image -= self.image_mean
-        self.input_image = np.reshape(self.input_image, [1]+list(self.input_image.shape))
-        # input dim [N, channel, height, width]
+
+        # 5. 增加批次维度 N，形状变为 (1, 224, 224, 3)
+        self.input_image = np.expand_dims(self.input_image, axis=0)
+
+        # 6. 转换维度顺序为 (N, C, H, W)，形状变为 (1, 3, 224, 224)
+        # 这是为了匹配神经网络的输入要求
         self.input_image = np.transpose(self.input_image, [0, 3, 1, 2])
 
     def forward(self):
